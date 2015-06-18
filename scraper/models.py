@@ -38,7 +38,7 @@ class Keyword(models.Model):
         return self.keyword
 
     def url(self):
-        '''Return pinterest search query.'''
+        '''Return pinterest search query for keyword.'''
         return 'https://www.pinterest.com/search/?q={}'.format(
             self.keyword.replace(' ', '+')
         )

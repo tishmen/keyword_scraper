@@ -22,15 +22,14 @@ class Scraper(object):
         return data
 
     def generate_keyword(self, keyword, term, position):
-        '''Return 'result keyword' if position is 0 else 'keyword result'.'''
+        '''Return 'term keyword' if position is 0 else 'keyword term'.'''
         if position == 0:
             return '{} {}'.format(term, keyword)
         return '{} {}'.format(keyword, term)
 
     def save_keywords(self, keyword, json):
-        '''Return list of generated keyword objects.'''
-        data = json['resourceDataCache'][0]['data']['guides']
-        for result in data:
+        '''Get and save generated keyword objects.'''
+        for result in json['resourceDataCache'][0]['data']['guides']:
             Keyword.objects.create(
                 keyword=self.generate_keyword(
                     keyword, result['term'], result['position']

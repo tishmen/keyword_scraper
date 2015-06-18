@@ -12,5 +12,5 @@ class KeywordResource(resources.ModelResource):
         exclude = ('scraped', 'added_at', )
 
     def dehydrate_id(self, keyword):
-        '''Remove id values while exporting.'''
+        '''Remove id values on export.'''
         return ''
