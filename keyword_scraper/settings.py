@@ -122,7 +122,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'pinterest_marketing': {
+        'keyword_scraper': {
             'handlers': ['file'],
             'level': 'DEBUG',
         }

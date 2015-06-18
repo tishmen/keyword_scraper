@@ -1,3 +1,44 @@
-from django.db import models
+from django.db import models, IntegrityError
 
-# Create your models here.
+CATEGORIES = [
+    'animals', 'architecture', 'art', 'cars_motorcycles', 'celebrities',
+    'design', 'diy_crafts', 'education', 'film_music_books', 'food_drink',
+    'gardening', 'geek', 'hair_beauty', 'health_fitness', 'history',
+    'holidays_events', 'home_decor', 'humor', 'illustrations_posters', 'kids',
+    'mens_fashion', 'outdoors', 'photography', 'products', 'quotes',
+    'science_nature', 'sports', 'tattoos', 'technology', 'travel', 'weddings',
+    'womens_fashion', 'other'
+]
+
+
+class Keyword(models.Model):
+
+    '''Main storage for keyword.'''
+
+    class Meta:
+        unique_together = ('keyword', 'category')
+
+    keyword = models.TextField()
+    category = models.CharField(
+        max_length=21,
+        choices=((category, category) for category in CATEGORIES)
+    )
+    scraped = models.BooleanField(default=False)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        '''Override model save method. Fail silently on IntegrityError.'''
+        try:
+            super(Keyword, self).save(*args, **kwargs)
+        except IntegrityError:
+            pass
+
+    def __str__(self):
+        '''Override model string method.'''
+        return self.keyword
+
+    def url(self):
+        '''Return pinterest search query.'''
+        return 'https://www.pinterest.com/search/?q={}'.format(
+            self.keyword.replace(' ', '+')
+        )
