@@ -3,3 +3,4 @@ migrations
 *.pyc
 *.sublime-project
 *.sublime-workspace
+log
