@@ -10,7 +10,7 @@ log = logging.getLogger('keyword_scraper')
 
 @shared_task(bind=True)
 def scrape_task(self, keyword):
-    '''Celery task for scraping pinterest keywords suggestions.'''
+    '''Celery task for scraping pinterest keyword suggestions.'''
     try:
         Scraper()(keyword)
     except Exception:

@@ -3,14 +3,15 @@ from import_export import resources
 from scraper.models import Keyword
 
 
-class KeywordResource(resources.ModelResource):
+class CustomResource(resources.ModelResource):
 
-    '''Resource class for keyword.'''
+    def dehydrate_id(self, keyword):
+        '''Dehydrate id value on export.'''
+        return ''
+
+
+class KeywordResource(CustomResource):
 
     class Meta:
         model = Keyword
         exclude = ('scraped', 'added_at', )
-
-    def dehydrate_id(self, keyword):
-        '''Remove id values on export.'''
-        return ''

@@ -1,4 +1,4 @@
-from django.db import models, IntegrityError
+from django.db import models
 
 CATEGORIES = [
     'animals', 'architecture', 'art', 'cars_motorcycles', 'celebrities',
@@ -13,8 +13,6 @@ CATEGORIES = [
 
 class Keyword(models.Model):
 
-    '''Main storage for keyword.'''
-
     class Meta:
         unique_together = ('keyword', 'category')
 
@@ -26,19 +24,11 @@ class Keyword(models.Model):
     scraped = models.BooleanField(default=False)
     added_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        '''Override model save method. Fail silently on IntegrityError.'''
-        try:
-            super(Keyword, self).save(*args, **kwargs)
-        except IntegrityError:
-            pass
-
     def __str__(self):
-        '''Override model string method.'''
         return self.keyword
 
     def url(self):
-        '''Return pinterest search query for keyword.'''
+        '''Return pinterest keyword search query.'''
         return 'https://www.pinterest.com/search/?q={}'.format(
             self.keyword.replace(' ', '+')
         )

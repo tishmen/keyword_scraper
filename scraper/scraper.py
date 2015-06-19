@@ -11,10 +11,8 @@ log = logging.getLogger('keyword_scraper')
 
 class Scraper(object):
 
-    '''Scrape pinterest keyword suggestions and generate new ones.'''
-
     def get_data(self, url):
-        '''Return json from page source. Pinterest specific.'''
+        '''Return json from page source.'''
         response = requests.get(url)
         result = re.search('P.start.start\((.*)\);', response.text)
         data = json.loads(result.group(1))
@@ -28,18 +26,17 @@ class Scraper(object):
         return '{} {}'.format(keyword, result['term'])
 
     def save_keywords(self, keyword, json):
-        '''Get and save generated keyword objects.'''
+        '''Fetch and save generated keyword objects.'''
         data = json['resourceDataCache'][0]['data']['guides'] or []
         for result in data:
             generated_keyword = self.generate_keyword(keyword, result)
-            Keyword.objects.create(
+            Keyword.objects.get_or_create(
                 keyword=generated_keyword,
                 category=keyword.category,
-                scraped=True
+                scraped=True,
             )
             log.debug('Saved keyword %s', generated_keyword)
 
     def __call__(self, keyword):
-        '''Run code for Scraper.'''
         data = self.get_data(keyword.url())
         self.save_keywords(keyword, data)
